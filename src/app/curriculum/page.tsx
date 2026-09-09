@@ -1,39 +1,77 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { Card } from "@/components/Card";
 import { Disclaimer } from "@/components/Disclaimer";
 import { useApp } from "@/components/AppProvider";
-import { CURRICULUM, allCurriculumItemIds } from "@/lib/data/curriculum";
+import {
+  GI_CURRICULUM,
+  NOGI_CURRICULUM,
+  allCurriculumItemIds,
+} from "@/lib/data/curriculum";
+import type { CurriculumTrack } from "@/lib/types";
 
 export default function CurriculumPage() {
   const { state, toggleCurriculumItem } = useApp();
+  const [track, setTrack] = useState<CurriculumTrack>("gi");
+
+  const weeks = track === "gi" ? GI_CURRICULUM : NOGI_CURRICULUM;
+  const trackIds = useMemo(
+    () => weeks.flatMap((w) => w.items.map((i) => i.id)),
+    [weeks]
+  );
+  const doneCount = trackIds.filter((id) => state.curriculumProgress[id]).length;
+  const pct = Math.round((doneCount / Math.max(trackIds.length, 1)) * 100);
+
   const allIds = useMemo(() => allCurriculumItemIds(), []);
-  const doneCount = allIds.filter((id) => state.curriculumProgress[id]).length;
-  const pct = Math.round((doneCount / Math.max(allIds.length, 1)) * 100);
+  const allDone = allIds.filter((id) => state.curriculumProgress[id]).length;
 
   const currentWeek =
-    CURRICULUM.find((w) =>
+    weeks.find((w) =>
       w.items.some((item) => !state.curriculumProgress[item.id])
-    ) ?? CURRICULUM[CURRICULUM.length - 1];
+    ) ?? weeks[weeks.length - 1];
 
   return (
-    <AppShell title="Curriculum" subtitle="12-week lanky starter plan">
+    <AppShell title="Curriculum" subtitle="Separate Gi & No-Gi 12-week tracks">
       <div className="space-y-4">
+        <div className="flex gap-2">
+          {(
+            [
+              { id: "gi" as const, label: "Gi track" },
+              { id: "nogi" as const, label: "No-Gi track" },
+            ] as const
+          ).map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => setTrack(t.id)}
+              className={`min-h-[44px] flex-1 rounded-xl text-sm font-bold transition ${
+                track === t.id
+                  ? "bg-lime-400 text-slate-950"
+                  : "border border-slate-700 bg-slate-900 text-slate-300"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+
         <Card className="border-lime-500/20 shadow-glow">
           <div className="flex items-end justify-between gap-3">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wide text-lime-500">
-                Overall progress
+                {track === "gi" ? "Gi" : "No-Gi"} track progress
               </p>
               <p className="mt-1 text-3xl font-black text-white">
                 {doneCount}
                 <span className="text-lg font-semibold text-slate-500">
-                  /{allIds.length}
+                  /{trackIds.length}
                 </span>
               </p>
-              <p className="text-xs text-slate-400">checklist items done</p>
+              <p className="text-xs text-slate-400">
+                checklist items · {allDone}/{allIds.length} across both tracks
+              </p>
             </div>
             <p className="text-2xl font-black text-lime-400">{pct}%</p>
           </div>
@@ -51,7 +89,7 @@ export default function CurriculumPage() {
           </p>
         </Card>
 
-        {CURRICULUM.map((week) => {
+        {weeks.map((week) => {
           const weekDone = week.items.filter(
             (i) => state.curriculumProgress[i.id]
           ).length;

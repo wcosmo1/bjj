@@ -96,7 +96,7 @@ export default function HomePage() {
               className="flex min-h-[72px] flex-col justify-center rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3"
             >
               <span className="text-sm font-bold text-white">Technique guide</span>
-              <span className="text-xs text-slate-400">6 modules</span>
+              <span className="text-xs text-slate-400">Gi & No-Gi · {MODULES.length} modules</span>
             </Link>
             <Link
               href="/progress"
@@ -112,7 +112,7 @@ export default function HomePage() {
               className="flex min-h-[72px] flex-col justify-center rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3"
             >
               <span className="text-sm font-bold text-white">12-week plan</span>
-              <span className="text-xs text-slate-400">Starter checklist</span>
+              <span className="text-xs text-slate-400">Gi + No-Gi tracks</span>
             </Link>
             <Link
               href="/profile"

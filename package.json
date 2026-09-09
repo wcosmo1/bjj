@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "export-guide": "npx tsx scripts/export_guide_content.mjs",
+    "build-guide-pdf": "bash scripts/build_guide_pdf.sh"
   },
   "dependencies": {
     "react": "^18",

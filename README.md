@@ -83,3 +83,17 @@ Educational grappling guidance only. Not medical, nutrition, or professional coa
 ## License
 
 Private / personal project unless otherwise stated.
+
+## Sellable PDF (Gi & No-Gi)
+
+One PDF product with shared intro, **Part A — Gi**, **Part B — No-Gi**, separate 12-week curricula, shared logs, and disclaimer.
+
+```bash
+npm run build-guide-pdf
+```
+
+Outputs:
+- `/workspace/Long-Game-Lanky-BJJ-Guide.pdf`
+- `/workspace/lankybjj/Long-Game-Lanky-BJJ-Guide.pdf`
+
+Requires `reportlab` (and optionally `pypdf`) in the Python used by the script.

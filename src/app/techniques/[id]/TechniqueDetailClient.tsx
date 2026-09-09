@@ -9,6 +9,7 @@ import { useApp } from "@/components/AppProvider";
 import { MODULES } from "@/lib/data/modules";
 import { getTechniqueById } from "@/lib/data/techniques";
 import type { TechniqueStatus } from "@/lib/types";
+import { RULESET_LABELS } from "@/lib/types";
 
 export default function TechniqueDetailClient({ id }: { id: string }) {
   const technique = getTechniqueById(id);
@@ -47,6 +48,12 @@ export default function TechniqueDetailClient({ id }: { id: string }) {
           ← All techniques
         </Link>
 
+        <div className="flex flex-wrap gap-2">
+          <span className="rounded-full bg-slate-800 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-300">
+            {RULESET_LABELS[technique.ruleSet]}
+          </span>
+        </div>
+
         <Card className="border-lime-500/20">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-lime-500">
             Why it fits lanky frames
@@ -55,6 +62,17 @@ export default function TechniqueDetailClient({ id }: { id: string }) {
             {technique.whyLanky}
           </p>
         </Card>
+
+        {technique.transferNote ? (
+          <Card className="border-amber-500/20 bg-amber-400/5">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-amber-400">
+              Gi ↔ No-Gi callout
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-slate-200">
+              {technique.transferNote}
+            </p>
+          </Card>
+        ) : null}
 
         <Card>
           <TechniqueStatusSelect
