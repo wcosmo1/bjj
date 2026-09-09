@@ -90,6 +90,21 @@ export default function HomePage() {
             </div>
           </Card>
 
+          <Card className="border-lime-500/25 bg-lime-400/5">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-lime-500">
+              New · AI Coach
+            </p>
+            <p className="mt-1 text-sm text-slate-200">
+              Situation → lanky advice + exact Watch links. Learns on this device.
+            </p>
+            <Link
+              href="/coach"
+              className="mt-3 inline-flex min-h-[44px] items-center rounded-xl bg-lime-400 px-4 text-sm font-bold text-slate-950"
+            >
+              Ask the coach
+            </Link>
+          </Card>
+
           <div className="grid grid-cols-2 gap-3">
             <Link
               href="/techniques"

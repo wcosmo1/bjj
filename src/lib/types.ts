@@ -67,6 +67,59 @@ export interface CurriculumWeek {
   items: { id: string; label: string; tip?: string }[];
 }
 
+/** Curated instructional video for a technique card. */
+export interface TechniqueVideo {
+  title: string;
+  url: string;
+  instructor?: string;
+  ruleSet?: RuleSet;
+  whyThisVideo: string;
+  /** True when URL is best-effort / search fallback and should be spot-checked. */
+  needsReview?: boolean;
+}
+
+export interface TechniqueMedia {
+  techniqueId: string;
+  videos: TechniqueVideo[];
+  /** Optional still/diagram URL or path under public/ */
+  imageUrl?: string;
+  imageAlt?: string;
+}
+
+export type CoachFeedback = "helpful" | "not_helpful";
+
+export interface CoachMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  createdAt: string;
+  techniqueIds?: string[];
+  feedback?: CoachFeedback;
+  mode?: "retrieval" | "llm";
+}
+
+export interface CoachMemory {
+  preferredRuleSet: RuleSet | "any";
+  focusPositions: string[];
+  struggleTags: string[];
+  notes: string;
+  askedTechniqueCounts: Record<string, number>;
+  /** Derived one-liner the coach can bias with. */
+  summary: string;
+}
+
+export interface CoachLlmSettings {
+  apiKey: string;
+  baseUrl: string;
+  model: string;
+}
+
+export interface CoachState {
+  messages: CoachMessage[];
+  memory: CoachMemory;
+  llm: CoachLlmSettings;
+}
+
 export const DEFAULT_PROFILE: Profile = {
   name: "Jay",
   heightFeet: 6,
@@ -74,6 +127,21 @@ export const DEFAULT_PROFILE: Profile = {
   weightLbs: 148,
   notes:
     "Long limbs, light frame. Prefer frames, angles, and distance over brute force.",
+};
+
+export const DEFAULT_COACH_MEMORY: CoachMemory = {
+  preferredRuleSet: "any",
+  focusPositions: [],
+  struggleTags: [],
+  notes: "",
+  askedTechniqueCounts: {},
+  summary: "",
+};
+
+export const DEFAULT_COACH_LLM: CoachLlmSettings = {
+  apiKey: "",
+  baseUrl: "https://api.openai.com/v1",
+  model: "gpt-4o-mini",
 };
 
 export const STATUS_LABELS: Record<TechniqueStatus, string> = {

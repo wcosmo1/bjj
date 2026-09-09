@@ -10,6 +10,8 @@ import { MODULES } from "@/lib/data/modules";
 import { getTechniqueById } from "@/lib/data/techniques";
 import type { TechniqueStatus } from "@/lib/types";
 import { RULESET_LABELS } from "@/lib/types";
+import { getMediaForTechnique } from "@/lib/data/media";
+import { VideoLinks } from "@/components/coach/VideoLinks";
 
 export default function TechniqueDetailClient({ id }: { id: string }) {
   const technique = getTechniqueById(id);
@@ -38,6 +40,9 @@ export default function TechniqueDetailClient({ id }: { id: string }) {
   const status: TechniqueStatus =
     state.techniqueProgress[technique.id] ?? "not_started";
 
+  const media = getMediaForTechnique(technique.id);
+
+
   return (
     <AppShell title={technique.name} subtitle={mod?.title}>
       <div className="space-y-4">
@@ -53,6 +58,22 @@ export default function TechniqueDetailClient({ id }: { id: string }) {
             {RULESET_LABELS[technique.ruleSet]}
           </span>
         </div>
+
+
+        {media?.videos?.length ? (
+          <Card className="border-lime-500/20">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400">
+              Watch (references)
+            </h2>
+            <p className="mt-1 text-[11px] leading-relaxed text-slate-500">
+              Public instructionals that match this card. Educational references only —
+              confirm details with your gym coach.
+            </p>
+            <div className="mt-3">
+              <VideoLinks videos={media.videos} />
+            </div>
+          </Card>
+        ) : null}
 
         <Card className="border-lime-500/20">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-lime-500">
